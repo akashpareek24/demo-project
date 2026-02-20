@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { BigCard, SmallImageCard, SmallTextCard } from "./CardBlocks";
+import { incrementFeedVisibleCount, setFeedVisibleCount } from "../store/slices/uiSlice";
 
 function normalizeKey(value = "") {
   return String(value || "")
@@ -29,13 +32,23 @@ export default function FeedLayout({
   loadingMore = false,
   showLead = true,
   paginate = true,
+  feedKey = "",
   emptyTitle = "No stories found",
   emptyText = "Try another keyword or category.",
 }) {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const CARDS_PER_ROW = 3;
   const BATCH_CARDS = 6;
-  const [visibleCount, setVisibleCount] = useState(BATCH_CARDS);
+  const resolvedFeedKey = feedKey || `${location.pathname}::${showLead ? "lead" : "grid"}::${paginate ? "paged" : "full"}`;
+  const visibleCountInStore = useSelector((s) => s.ui.feedVisibleByKey[resolvedFeedKey]);
+  const visibleCount = visibleCountInStore ?? BATCH_CARDS;
   const safeItems = useMemo(() => (Array.isArray(items) ? items : []), [items]);
+
+  useEffect(() => {
+    if (!paginate || visibleCountInStore !== undefined) return;
+    dispatch(setFeedVisibleCount({ key: resolvedFeedKey, count: BATCH_CARDS }));
+  }, [dispatch, paginate, resolvedFeedKey, visibleCountInStore]);
 
   if (!safeItems.length) {
     return (
@@ -115,7 +128,7 @@ export default function FeedLayout({
             onClick={() => {
               const nextVisibleCount = visibleCount + BATCH_CARDS;
               if (nextVisibleCount > maxRenderable && onLoadMore && hasMore && !loadingMore) onLoadMore();
-              setVisibleCount(nextVisibleCount);
+              dispatch(incrementFeedVisibleCount({ key: resolvedFeedKey, step: BATCH_CARDS, base: BATCH_CARDS }));
             }}
             disabled={loadingMore || (!hasMore && renderCount >= maxRenderable)}
           >

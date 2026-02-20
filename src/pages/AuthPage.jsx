@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -8,31 +8,49 @@ import {
 } from "firebase/auth";
 import { getFirebaseAuth, isFirebaseConfigured } from "../lib/firebase";
 import { applyAuthUser } from "../store/slices/authSlice";
+import {
+  resetAuthFormState,
+  setAuthFormEmail,
+  setAuthFormError,
+  setAuthFormMode,
+  setAuthFormName,
+  setAuthFormPassword,
+  setAuthFormSubmitted,
+  setAuthFormSubmitting,
+  setAuthFormSuccessText,
+} from "../store/slices/authFormSlice";
 
 export default function AuthPage() {
   const dispatch = useDispatch();
+  const {
+    mode,
+    email,
+    name,
+    password,
+    submitted,
+    submitting,
+    error,
+    successText,
+  } = useSelector((s) => s.authForm);
   const [searchParams] = useSearchParams();
   const prefillEmail = useMemo(() => searchParams.get("email") || "", [searchParams]);
-  const [mode, setMode] = useState("signup");
-  const [email, setEmail] = useState(prefillEmail);
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [successText, setSuccessText] = useState("");
+
+  useEffect(() => {
+    dispatch(resetAuthFormState());
+    dispatch(setAuthFormEmail(prefillEmail));
+  }, [dispatch, prefillEmail]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password || (mode === "signup" && !name)) return;
     if (!isFirebaseConfigured) {
-      setError("Firebase config missing. Add VITE_FIREBASE_* keys in .env.");
+      dispatch(setAuthFormError("Firebase config missing. Add VITE_FIREBASE_* keys in .env."));
       return;
     }
 
-    setSubmitting(true);
-    setError("");
-    setSuccessText("");
+    dispatch(setAuthFormSubmitting(true));
+    dispatch(setAuthFormError(""));
+    dispatch(setAuthFormSuccessText(""));
 
     try {
       const auth = getFirebaseAuth();
@@ -43,19 +61,19 @@ export default function AuthPage() {
           await updateProfile(cred.user, { displayName: name.trim() });
         }
         dispatch(applyAuthUser(cred.user));
-        setSuccessText(`Account created. Logged in as ${cred.user.email || email}`);
+        dispatch(setAuthFormSuccessText(`Account created. Logged in as ${cred.user.email || email}`));
       } else {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         dispatch(applyAuthUser(cred.user));
-        setSuccessText(`Login successful. Welcome back ${cred.user.email || email}`);
+        dispatch(setAuthFormSuccessText(`Login successful. Welcome back ${cred.user.email || email}`));
       }
 
-      setSubmitted(true);
+      dispatch(setAuthFormSubmitted(true));
     } catch (err) {
       const msg = err?.message || "Authentication failed. Try again.";
-      setError(msg.replace("Firebase: ", "").replace(/\(auth\/[a-z-]+\)\.?/g, "").trim());
+      dispatch(setAuthFormError(msg.replace("Firebase: ", "").replace(/\(auth\/[a-z-]+\)\.?/g, "").trim()));
     } finally {
-      setSubmitting(false);
+      dispatch(setAuthFormSubmitting(false));
     }
   };
 
@@ -90,14 +108,14 @@ export default function AuthPage() {
                     <button
                       type="button"
                       className={`btn btn-sm rounded-0 ${mode === "signup" ? "btn-primary" : "btn-outline-secondary"}`}
-                      onClick={() => setMode("signup")}
+                      onClick={() => dispatch(setAuthFormMode("signup"))}
                     >
                       Sign Up
                     </button>
                     <button
                       type="button"
                       className={`btn btn-sm rounded-0 ${mode === "login" ? "btn-primary" : "btn-outline-secondary"}`}
-                      onClick={() => setMode("login")}
+                      onClick={() => dispatch(setAuthFormMode("login"))}
                     >
                       Login
                     </button>
@@ -135,7 +153,7 @@ export default function AuthPage() {
                           type="text"
                           className="form-control rounded-0"
                           value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          onChange={(e) => dispatch(setAuthFormName(e.target.value))}
                           placeholder="Enter your name"
                           required
                         />
@@ -150,7 +168,7 @@ export default function AuthPage() {
                         type="email"
                         className="form-control rounded-0"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => dispatch(setAuthFormEmail(e.target.value))}
                         placeholder="you@gmail.com"
                         required
                       />
@@ -164,7 +182,7 @@ export default function AuthPage() {
                         type="password"
                         className="form-control rounded-0"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => dispatch(setAuthFormPassword(e.target.value))}
                         placeholder="Enter password"
                         minLength={6}
                         required

@@ -4,6 +4,7 @@ import feedsReducer from "./slices/feedsSlice";
 import searchReducer from "./slices/searchSlice";
 import libraryReducer from "./slices/librarySlice";
 import uiReducer from "./slices/uiSlice";
+import authFormReducer from "./slices/authFormSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     search: searchReducer,
     library: libraryReducer,
     ui: uiReducer,
+    authForm: authFormReducer,
   },
 });

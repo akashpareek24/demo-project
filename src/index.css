@@ -1220,9 +1220,18 @@ h6,
 
 .feed-media,
 .img-slot {
+  position: relative;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   overflow: hidden;
+}
+
+.img-slot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.22) 100%);
+  pointer-events: none;
 }
 
 .img-slot-img {
@@ -2426,6 +2435,14 @@ h6,
   border-color: rgba(255, 255, 255, 0.62) !important;
 }
 
+.classic-header .nav-join-btn {
+  min-height: 30px;
+  margin-right: 0.45rem;
+  border-radius: 999px !important;
+  padding-inline: 0.78rem;
+  font-size: 0.74rem;
+}
+
 .classic-header .search-icon-btn.header-action-btn {
   min-width: 30px;
   min-height: 30px;
@@ -2917,3 +2934,270 @@ h6,
     padding-top: 0.2rem !important;
   }
 }
+
+/* =========================================================
+   BEGIN: Global Wire Visual Layer (easy remove block)
+   Remove this full block to revert to previous look.
+   ========================================================= */
+
+:root {
+  --gw-v2-bg: #f3f0ec;
+  --gw-v2-surface: #ffffff;
+  --gw-v2-ink: #1d2c42;
+  --gw-v2-muted: #6a7486;
+  --gw-v2-border: #d9d2c6;
+  --gw-v2-primary: #17365b;
+  --gw-v2-primary-2: #244d7b;
+  --gw-v2-accent: #d67a3c;
+}
+
+body {
+  background:
+    radial-gradient(circle at 85% 0%, rgba(214, 122, 60, 0.11), transparent 30%),
+    radial-gradient(circle at 0% 25%, rgba(36, 77, 123, 0.1), transparent 34%),
+    var(--gw-v2-bg);
+  color: var(--gw-v2-ink);
+}
+
+.site-header.classic-header {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.classic-header .utility-bar {
+  background: linear-gradient(90deg, rgba(32, 48, 72, 0.95), rgba(22, 35, 54, 0.92)) !important;
+}
+
+.classic-header .utility-bar .text-secondary {
+  color: rgba(238, 244, 251, 0.84) !important;
+}
+
+.classic-header .live-dot {
+  box-shadow: 0 0 0 4px rgba(213, 110, 74, 0.22);
+}
+
+.classic-header .header-inner {
+  min-height: 62px !important;
+  border: 0 !important;
+  position: relative;
+  overflow: hidden;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.classic-header .header-inner::before {
+  content: none;
+}
+
+.classic-header .header-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.classic-header .brand-wordmark {
+  color: var(--gw-v2-ink) !important;
+  font-size: clamp(1.6rem, 2vw, 2.1rem) !important;
+  letter-spacing: 0.01em;
+}
+
+.classic-header .section-nav-wrap {
+  background: linear-gradient(90deg, var(--gw-v2-primary), var(--gw-v2-primary-2)) !important;
+}
+
+.classic-header .nav-item-link {
+  border-radius: 999px !important;
+  border: 1px solid transparent !important;
+  padding: 0.42rem 0.76rem !important;
+  font-size: 0.72rem !important;
+}
+
+.classic-header .nav-item-link:hover,
+.classic-header .nav-item-link.active {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.32) !important;
+}
+
+.classic-header .category-mega-toggle {
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.classic-header .category-mega-menu {
+  border-radius: 14px !important;
+  border-color: var(--gw-v2-border) !important;
+}
+
+.news-panel,
+.card {
+  border-radius: 16px !important;
+  border: 1px solid var(--gw-v2-border) !important;
+  background: var(--gw-v2-surface) !important;
+  box-shadow: 0 8px 18px rgba(13, 22, 35, 0.08);
+}
+
+.lead-story-card,
+.story-slate-card,
+.feed-card-image,
+.detail-pulse-card,
+.nd-shell-box {
+  border-radius: 18px !important;
+}
+
+.lead-headline,
+.news-section-title,
+.trending-title,
+.detail-main-title,
+.nd-title {
+  color: var(--gw-v2-ink) !important;
+}
+
+.news-section-title {
+  font-size: clamp(1.78rem, 2.35vw, 2.25rem) !important;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.28rem;
+}
+
+.news-section-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c94b5f 0%, #2d5f8f 100%);
+}
+
+.trending-panel .news-panel-head {
+  background: linear-gradient(180deg, #fffdf8 0%, #f6f1e7 100%) !important;
+}
+
+.trending-live-badge {
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #c7455b, #8d2f44) !important;
+}
+
+.trending-chip {
+  border-radius: 999px !important;
+}
+
+.trending-item {
+  border-bottom-color: #e5ddd0 !important;
+}
+
+.trending-rank {
+  color: #be4b5f !important;
+}
+
+.feed-card .card-body,
+.story-slate-card .card-body {
+  padding: 0.95rem 1rem !important;
+}
+
+.story-summary,
+.card .text-secondary,
+.trending-subtitle,
+.search-head .small,
+.footer-link {
+  color: var(--gw-v2-muted) !important;
+}
+
+.btn-primary,
+.search-btn,
+.subscribe-btn {
+  --bs-btn-bg: #d67a3c;
+  --bs-btn-border-color: #d67a3c;
+  --bs-btn-hover-bg: #b9632b;
+  --bs-btn-hover-border-color: #b9632b;
+  --bs-btn-active-bg: #a95a26;
+  --bs-btn-active-border-color: #a95a26;
+}
+
+.load-more-btn {
+  border-radius: 25px !important;
+  border: 1px solid #cfc4b5 !important;
+  background: #fffdf9 !important;
+  color: #2d4666 !important;
+  box-shadow: 0 6px 16px rgba(29, 44, 66, 0.12);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.load-more-btn:hover,
+.load-more-btn:focus-visible {
+  background: linear-gradient(90deg, #d67a3c, #c45f2a) !important;
+  border-color: #c45f2a !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(196, 95, 42, 0.28);
+  transform: translateY(-1px);
+}
+
+.site-footer {
+  margin-top: 3.5rem !important;
+  background:
+    linear-gradient(110deg, rgba(18, 30, 47, 0.96), rgba(35, 56, 85, 0.92)),
+    radial-gradient(circle at 85% 15%, rgba(214, 122, 60, 0.25), transparent 35%) !important;
+  border-top: 0 !important;
+}
+
+.site-footer,
+.site-footer .text-secondary,
+.site-footer .small,
+.site-footer .footer-link,
+.site-footer .brand-wordmark {
+  color: rgba(241, 246, 253, 0.92) !important;
+}
+
+.site-footer .footer-link:hover {
+  color: #ffffff !important;
+}
+
+.site-footer .form-control,
+.site-footer .btn {
+  border-radius: 12px !important;
+}
+
+.site-footer .input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.site-footer .input-group > .form-control,
+.site-footer .input-group > .btn {
+  flex: 1 1 auto;
+}
+
+.site-footer .input-group > .btn {
+  flex: 0 0 auto;
+}
+
+.site-main .container > section {
+  margin-bottom: 2.25rem !important;
+}
+
+.site-main .container > section:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+.site-main .news-section-head {
+  margin-bottom: 1rem !important;
+}
+
+@media (max-width: 991.98px) {
+  .classic-header .header-inner {
+    min-height: 52px !important;
+  }
+
+  .classic-header .brand-wordmark {
+    font-size: 1.2rem !important;
+  }
+
+  .news-section-title {
+    font-size: 1.35rem !important;
+  }
+}
+/* =======================================================
+   END: Global Wire Visual Layer (easy remove block)
+   ======================================================= */

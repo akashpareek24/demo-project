@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
@@ -6,7 +6,7 @@ import searchIcon from "bootstrap-icons/icons/search.svg";
 import closeIcon from "bootstrap-icons/icons/x-lg.svg";
 import menuIcon from "bootstrap-icons/icons/list.svg";
 import { logoutUser } from "../store/slices/authSlice";
-import { setHeaderMoreOpen, setHeaderSearchOpen } from "../store/slices/uiSlice";
+import { setHeaderMoreOpen, setHeaderQuery, setHeaderSearchOpen } from "../store/slices/uiSlice";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ export default function Header() {
   const authUser = useSelector((s) => s.auth.user);
   const searchOpen = useSelector((s) => s.ui.headerSearchOpen);
   const moreOpen = useSelector((s) => s.ui.headerMoreOpen);
-  const [query, setQuery] = useState(() => new URLSearchParams(location.search).get("q") || "");
+  const query = useSelector((s) => s.ui.headerQuery);
   const searchInputRef = useRef(null);
   const moreBtnRef = useRef(null);
 
@@ -28,6 +28,11 @@ export default function Header() {
     { label: "Featured", to: "/featured" },
   ];
   const categories = ["Economy", "Technology", "Politics", "Culture", "Energy", "Defense", "Startups", "Climate"];
+
+  useEffect(() => {
+    const nextQuery = new URLSearchParams(location.search).get("q") || "";
+    dispatch(setHeaderQuery(nextQuery));
+  }, [dispatch, location.pathname, location.search]);
 
   const onSearch = (e) => {
     e.preventDefault();
@@ -170,7 +175,7 @@ export default function Header() {
                 ) : (
                   <button
                     type="button"
-                    className="btn btn-sm btn-primary fw-semibold d-none d-sm-inline-flex align-items-center justify-content-center subscribe-btn header-action-btn"
+                    className="btn btn-sm btn-primary fw-semibold d-inline-flex d-lg-none align-items-center justify-content-center subscribe-btn header-action-btn"
                     onClick={() => {
                       window.location.href = "/auth";
                     }}
@@ -188,7 +193,7 @@ export default function Header() {
                 name="q"
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => dispatch(setHeaderQuery(e.target.value))}
                 className="form-control header-search-input header-search-open-input"
                 placeholder="Search stories, topics, authors..."
                 aria-label="Search news"
@@ -224,6 +229,20 @@ export default function Header() {
             ))}
 
             <div className="dropdown ms-auto d-none d-lg-block">
+              {!authUser ? (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-primary fw-semibold d-none d-lg-inline-flex align-items-center justify-content-center nav-join-btn"
+                  onClick={() => {
+                    window.location.href = "/auth";
+                  }}
+                >
+                  Join Briefing
+                </button>
+              ) : null}
+            </div>
+
+            <div className="dropdown d-none d-lg-block">
               <button
                 ref={moreBtnRef}
                 className="btn category-mega-toggle fw-semibold px-2 py-1 rounded-0"
@@ -262,7 +281,7 @@ export default function Header() {
               name="q"
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => dispatch(setHeaderQuery(e.target.value))}
               className="form-control"
               placeholder="Search stories..."
               aria-label="Search news mobile"
