@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { EMPTY_FEED_STATE, fetchCategoryFirstPage } from "../store/slices/feedsSlice";
+import { fetchCategoryFirstPage } from "../store/slices/feedsSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectFeedStateByCategory } from "../store/selectors";
 
 function toTokenSet(text = "") {
   return new Set(
@@ -24,9 +25,9 @@ function scoreSimilarity(a, b) {
 }
 
 export function useNewsItem({ id, category, seedItem = null, fallbackAll = [] }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const resolvedCategory = category || "top";
-  const feedState = useSelector((s) => s.feeds.byCategory[resolvedCategory] || EMPTY_FEED_STATE);
+  const feedState = useAppSelector((s) => selectFeedStateByCategory(s, resolvedCategory));
   const items = useMemo(() => (Array.isArray(feedState.items) ? feedState.items : []), [feedState.items]);
   const loading = feedState.status === "loading" || feedState.loadedCategory !== resolvedCategory;
 

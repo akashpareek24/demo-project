@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { BigCard, SmallImageCard, SmallTextCard } from "./CardBlocks";
 import { incrementFeedVisibleCount, setFeedVisibleCount } from "../store/slices/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectFeedVisibleCountByKey } from "../store/selectors";
 
 function normalizeKey(value = "") {
   return String(value || "")
@@ -36,12 +37,12 @@ export default function FeedLayout({
   emptyTitle = "No stories found",
   emptyText = "Try another keyword or category.",
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const CARDS_PER_ROW = 3;
   const BATCH_CARDS = 6;
   const resolvedFeedKey = feedKey || `${location.pathname}::${showLead ? "lead" : "grid"}::${paginate ? "paged" : "full"}`;
-  const visibleCountInStore = useSelector((s) => s.ui.feedVisibleByKey[resolvedFeedKey]);
+  const visibleCountInStore = useAppSelector((s) => selectFeedVisibleCountByKey(s, resolvedFeedKey, undefined));
   const visibleCount = visibleCountInStore ?? BATCH_CARDS;
   const safeItems = useMemo(() => (Array.isArray(items) ? items : []), [items]);
 

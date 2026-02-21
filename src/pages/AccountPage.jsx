@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
+import { useAppSelector } from "../store/hooks";
+import { selectAuthUser, selectHistoryList, selectSavedList } from "../store/selectors";
 
 const TAB_META = {
   saved: { title: "Saved Stories", desc: "Stories you bookmarked for later." },
@@ -20,9 +21,9 @@ function storyPath(story = {}) {
 
 export default function AccountPage() {
   const [searchParams] = useSearchParams();
-  const authUser = useSelector((s) => s.auth.user);
-  const savedStories = useSelector((s) => s.library.savedList).slice(0, 24);
-  const historyStories = useSelector((s) => s.library.historyList).slice(0, 24);
+  const authUser = useAppSelector(selectAuthUser);
+  const savedStories = useAppSelector(selectSavedList).slice(0, 24);
+  const historyStories = useAppSelector(selectHistoryList).slice(0, 24);
 
   const tab = searchParams.get("tab") || "saved";
   const meta = TAB_META[tab] || TAB_META.saved;

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToHash from "./components/ScrollToHash";
@@ -19,9 +18,10 @@ import AccountPage from "./pages/AccountPage";
 import { startAuthListener } from "./store/slices/authSlice";
 import { syncLibraryState } from "./store/slices/librarySlice";
 import { HISTORY_EVENT, SAVED_EVENT } from "./lib/savedNews";
+import { useAppDispatch } from "./store/hooks";
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const isAuthRoute = location.pathname.startsWith("/auth");
 

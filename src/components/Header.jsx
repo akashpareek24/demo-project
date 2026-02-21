@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import searchIcon from "bootstrap-icons/icons/search.svg";
@@ -7,15 +6,22 @@ import closeIcon from "bootstrap-icons/icons/x-lg.svg";
 import menuIcon from "bootstrap-icons/icons/list.svg";
 import { logoutUser } from "../store/slices/authSlice";
 import { setHeaderMoreOpen, setHeaderQuery, setHeaderSearchOpen } from "../store/slices/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import {
+  selectAuthUser,
+  selectHeaderMoreOpen,
+  selectHeaderQuery,
+  selectHeaderSearchOpen,
+} from "../store/selectors";
 
 export default function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const authUser = useSelector((s) => s.auth.user);
-  const searchOpen = useSelector((s) => s.ui.headerSearchOpen);
-  const moreOpen = useSelector((s) => s.ui.headerMoreOpen);
-  const query = useSelector((s) => s.ui.headerQuery);
+  const authUser = useAppSelector(selectAuthUser);
+  const searchOpen = useAppSelector(selectHeaderSearchOpen);
+  const moreOpen = useAppSelector(selectHeaderMoreOpen);
+  const query = useAppSelector(selectHeaderQuery);
   const searchInputRef = useRef(null);
   const moreBtnRef = useRef(null);
 

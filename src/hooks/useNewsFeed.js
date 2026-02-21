@@ -1,17 +1,17 @@
 import { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  EMPTY_FEED_STATE,
   fetchCategoryFirstPage,
   loadMoreCategoryPage,
   refreshCategoryPage,
 } from "../store/slices/feedsSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectFeedStateByCategory } from "../store/selectors";
 
 const REFRESH_MS = Math.max(30000, Number(import.meta.env.VITE_NEWS_REFRESH_MS || 180000));
 
 export function useNewsFeed(category) {
-  const dispatch = useDispatch();
-  const state = useSelector((s) => s.feeds.byCategory[category] || EMPTY_FEED_STATE);
+  const dispatch = useAppDispatch();
+  const state = useAppSelector((s) => selectFeedStateByCategory(s, category));
 
   const {
     items,

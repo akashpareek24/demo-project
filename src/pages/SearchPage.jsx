@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import FeedLayout from "../components/FeedLayout";
 import { CATS } from "../data/newsData";
 import { useNewsSearch } from "../hooks/useNewsSearch";
 import { setSearchCategory } from "../store/slices/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectSearchCategory } from "../store/selectors";
 
 function prettyCat(cat) {
   if (cat === "all") return "All";
@@ -12,8 +13,8 @@ function prettyCat(cat) {
 }
 
 export default function SearchPage() {
-  const dispatch = useDispatch();
-  const category = useSelector((s) => s.ui.searchCategory);
+  const dispatch = useAppDispatch();
+  const category = useAppSelector(selectSearchCategory);
   const [searchParams] = useSearchParams();
   const query = (searchParams.get("q") || "").trim();
 

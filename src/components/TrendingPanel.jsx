@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getStoryKey } from "../lib/savedNews";
 import { toggleSavedStoryState } from "../store/slices/librarySlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectSavedMap } from "../store/selectors";
 
 function createViewLabel(item = {}, idx = 0) {
   const seed = [item.id, item.url, item.title, item.date, idx].filter(Boolean).join("|");
@@ -16,8 +17,8 @@ function createViewLabel(item = {}, idx = 0) {
 }
 
 export default function TrendingPanel({ items = [] }) {
-  const dispatch = useDispatch();
-  const savedStories = useSelector((s) => s.library.savedMap);
+  const dispatch = useAppDispatch();
+  const savedStories = useAppSelector(selectSavedMap);
   const list = useMemo(() => {
     const source = Array.isArray(items) ? items.filter(Boolean) : [];
     return source.slice(0, 9);

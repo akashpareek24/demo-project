@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -19,9 +18,11 @@ import {
   setAuthFormSubmitting,
   setAuthFormSuccessText,
 } from "../store/slices/authFormSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectAuthFormState } from "../store/selectors";
 
 export default function AuthPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     mode,
     email,
@@ -31,7 +32,7 @@ export default function AuthPage() {
     submitting,
     error,
     successText,
-  } = useSelector((s) => s.authForm);
+  } = useAppSelector(selectAuthFormState);
   const [searchParams] = useSearchParams();
   const prefillEmail = useMemo(() => searchParams.get("email") || "", [searchParams]);
 

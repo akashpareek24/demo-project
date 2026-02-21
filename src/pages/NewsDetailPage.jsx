@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { CATS } from "../data/newsData";
 import { useNewsItem } from "../hooks/useNewsItem";
 import { pushReadingHistoryState } from "../store/slices/librarySlice";
+import { useAppDispatch } from "../store/hooks";
 
 function stripHtml(input = "") {
   return String(input)
@@ -60,7 +60,7 @@ function buildExtraParagraphs(news, sectionName) {
 }
 
 export default function NewsDetailPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const location = useLocation();
   const seedItem = location?.state?.item || null;

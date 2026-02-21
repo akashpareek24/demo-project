@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { runSearch } from "../store/slices/searchSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { selectSearchState } from "../store/selectors";
 
 export function useNewsSearch(query, category = "all") {
-  const dispatch = useDispatch();
-  const searchState = useSelector((s) => s.search);
+  const dispatch = useAppDispatch();
+  const searchState = useAppSelector(selectSearchState);
 
   const normalizedQuery = String(query || "").trim();
   const normalizedCategory = String(category || "all").toLowerCase();

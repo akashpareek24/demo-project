@@ -15,4 +15,9 @@ export const store = configureStore({
     ui: uiReducer,
     authForm: authFormReducer,
   },
+  devTools: import.meta.env.DEV,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
