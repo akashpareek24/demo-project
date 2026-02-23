@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import NewsCard from "./NewsCard";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { incrementFeedVisibleCount, setFeedVisibleCount } from "../store/slices/uiSlice";
+import { selectFeedVisibleCountByKey } from "../store/selectors";
 
 export default function InfiniteFeed({
   items,
@@ -7,12 +10,21 @@ export default function InfiniteFeed({
   tokens = 20,      // 1..20
   initial = 18,
   step = 12,
+  feedKey = "infinite-feed",
   variantPattern = ["highlight", "standard", "compact", "standard"],
 }) {
-  const [visible, setVisible] = useState(initial);
+  const dispatch = useAppDispatch();
+  const visibleInStore = useAppSelector((s) => selectFeedVisibleCountByKey(s, feedKey, undefined));
+  const visible = visibleInStore ?? initial;
+
+  useEffect(() => {
+    if (visibleInStore !== undefined) return;
+    dispatch(setFeedVisibleCount({ key: feedKey, count: initial }));
+  }, [dispatch, feedKey, initial, visibleInStore]);
 
   // never-ending: repeat by modulo
   const feed = useMemo(() => {
+    if (!Array.isArray(items) || !items.length) return [];
     const out = [];
     for (let i = 0; i < visible; i++) {
       out.push(items[i % items.length]);
@@ -41,7 +53,7 @@ export default function InfiniteFeed({
       <div className="d-flex justify-content-center mt-4">
         <button
           className="btn btn-outline-secondary fw-semibold px-4"
-          onClick={() => setVisible((v) => v + step)}
+          onClick={() => dispatch(incrementFeedVisibleCount({ key: feedKey, step, base: initial }))}
         >
           Load more
         </button>
