@@ -19,8 +19,10 @@ export const selectSearchCategory = createSelector([selectUiState], (ui) => ui.s
 export const selectFeedStateByCategory = (state, category) =>
   state.feeds.byCategory[category] || EMPTY_FEED_STATE;
 
-export const selectFeedVisibleCountByKey = (state, key, fallback = 6) =>
-  state.ui.feedVisibleByKey[key] ?? fallback;
+export const selectFeedVisibleCountByKey = (state, key, fallback) => {
+  const value = state.ui.feedVisibleByKey[key];
+  return value === undefined ? fallback : value;
+};
 
 export const selectSearchItems = createSelector([selectSearchState], (search) =>
   Array.isArray(search.items) ? search.items : []
