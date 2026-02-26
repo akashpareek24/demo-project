@@ -2936,6 +2936,145 @@ h6,
 }
 
 /* =========================================================
+   Stripe Animation Layer (layout-safe, CSS-only)
+   Remove this block if you don't want animation.
+   ========================================================= */
+
+@keyframes gwStripeSweep {
+  0% {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(140%);
+    opacity: 0;
+  }
+}
+
+@keyframes gwUnderlineStripe {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.trending-panel .news-panel-head {
+  position: relative;
+  overflow: hidden;
+}
+
+.trending-panel .news-panel-head::after {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: 0;
+  width: 46%;
+  height: 170%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(45, 95, 143, 0.08) 26%,
+    rgba(255, 255, 255, 0.16) 38%,
+    rgba(214, 122, 60, 0.22) 50%,
+    rgba(255, 255, 255, 0.2) 60%,
+    rgba(45, 95, 143, 0.1) 72%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: gwStripeSweep 4.4s ease-in-out infinite;
+}
+
+.news-section-title::after {
+  background-image: linear-gradient(90deg, #c94b5f 0%, #2d5f8f 45%, #d67a3c 100%) !important;
+  background-size: 240% 100% !important;
+  animation: gwUnderlineStripe 2.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trending-panel .news-panel-head::after,
+  .news-section-title::after {
+    animation: none !important;
+  }
+}
+
+@keyframes gwCardBorderSweep {
+  0% {
+    background-position: -180% 50%;
+  }
+  100% {
+    background-position: 220% 50%;
+  }
+}
+
+.feed-card,
+.news-panel {
+  position: relative;
+  isolation: isolate;
+}
+
+.feed-card::after,
+.news-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  z-index: 2;
+  padding: 1.15px; /* border thickness */
+  background:
+    linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(45, 95, 143, 0.12) 38%,
+      rgba(214, 122, 60, 0.34) 48%,
+      rgba(255, 255, 255, 0.78) 50%,
+      rgba(214, 122, 60, 0.32) 52%,
+      rgba(45, 95, 143, 0.14) 62%,
+      rgba(255, 255, 255, 0) 100%
+    ) border-box;
+  background-size: 220% 100%;
+  background-position: -160% 50%;
+  animation: gwCardBorderSweep 1.25s linear infinite;
+  /* show only border ring (hide center completely) */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.feed-card:hover::after,
+.news-panel:hover::after {
+  opacity: 1;
+}
+
+.feed-card > *,
+.news-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed-card::after,
+  .news-panel::after {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
    BEGIN: Global Wire Visual Layer (easy remove block)
    Remove this full block to revert to previous look.
    ========================================================= */
