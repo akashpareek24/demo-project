@@ -31,3 +31,133 @@
     transition: none !important;
   }
 }
+
+/* =========================================================
+   Motion Polish Layer (safe / removable)
+   Solais-inspired subtle motion without layout changes
+   ========================================================= */
+
+@keyframes gwSoftPulse {
+  0%, 100% {
+    box-shadow: 0 8px 18px rgba(180, 71, 95, 0.18);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 10px 22px rgba(180, 71, 95, 0.28);
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes gwButtonSheen {
+  0% {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(160%);
+    opacity: 0;
+  }
+}
+
+@keyframes gwAmbientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.reveal {
+  transition:
+    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.reveal-pending {
+  opacity: 0;
+  transform: translateY(14px) scale(0.995);
+  filter: blur(1px);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger cards inside rows */
+.trio-row .feed-card:nth-child(1),
+.top-mini-grid .feed-card:nth-child(1) {
+  transition-delay: 0ms;
+}
+.trio-row .feed-card:nth-child(2),
+.top-mini-grid .feed-card:nth-child(2) {
+  transition-delay: 60ms;
+}
+.trio-row .feed-card:nth-child(3),
+.top-mini-grid .feed-card:nth-child(3) {
+  transition-delay: 120ms;
+}
+.trio-row .feed-card:nth-child(4),
+.top-mini-grid .feed-card:nth-child(4) {
+  transition-delay: 180ms;
+}
+
+/* Premium subtle motion on CTA buttons */
+.subscribe-btn,
+.nav-join-btn,
+.search-btn,
+.load-more-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.subscribe-btn::after,
+.nav-join-btn::after,
+.search-btn::after,
+.load-more-btn::after {
+  content: "";
+  position: absolute;
+  inset: -20% auto -20% 0;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.26) 45%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0;
+}
+
+.subscribe-btn:hover::after,
+.nav-join-btn:hover::after,
+.search-btn:hover::after,
+.load-more-btn:hover::after {
+  opacity: 1;
+  animation: gwButtonSheen 900ms ease-out 1;
+}
+
+/* Live badge breathing pulse */
+.trending-live-badge {
+  animation: gwSoftPulse 2.4s ease-in-out infinite;
+}
+
+/* Subtle animated ambient line on section nav */
+.section-nav-wrap {
+  background-size: 180% 100% !important;
+  animation: gwAmbientShift 14s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trending-live-badge,
+  .section-nav-wrap {
+    animation: none !important;
+  }
+}
